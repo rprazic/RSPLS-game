@@ -1,4 +1,4 @@
-namespace GameService.Application.Tests.Handlers;
+namespace GameService.Application.Tests.Helpers;
 
 public class TestAsyncEnumerator<T>(IEnumerator<T> inner) : IAsyncEnumerator<T>
 {

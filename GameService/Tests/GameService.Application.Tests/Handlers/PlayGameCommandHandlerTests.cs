@@ -16,17 +16,10 @@ public class PlayGameCommandHandlerTests
     private readonly Mock<GameDbContext> _mockDbContext;
     private readonly Mock<DbSet<GameResult>> _mockGameResults;
     private readonly PlayGameCommandHandler _handler;
-    private readonly List<Choice> _choices;
 
     public PlayGameCommandHandlerTests()
     {
-        _mockRandomClient = new Mock<IRandomNumberClient>();
-        _mockDbContext = new Mock<GameDbContext>();
-        _mockGameResults = new Mock<DbSet<GameResult>>();
-
-        var mockLogger = new Mock<ILogger<PlayGameCommandHandler>>();
-        var mockChoiceRepository = new Mock<IChoiceRepository>();
-        _choices = new List<Choice>
+        var choices = new List<Choice>
         {
             new() { Id = 1, Name = "rock" },
             new() { Id = 2, Name = "paper" },
@@ -35,10 +28,14 @@ public class PlayGameCommandHandlerTests
             new() { Id = 5, Name = "spock" }
         };
 
-        mockChoiceRepository.Setup(x => x.GetAllChoicesAsync())
-            .ReturnsAsync(_choices);
-
+        _mockRandomClient = new Mock<IRandomNumberClient>();
+        _mockDbContext = new Mock<GameDbContext>();
+        _mockGameResults = new Mock<DbSet<GameResult>>();
         _mockDbContext.Setup(x => x.GameResults).Returns(_mockGameResults.Object);
+        var mockLogger = new Mock<ILogger<PlayGameCommandHandler>>();
+        var mockChoiceRepository = new Mock<IChoiceRepository>();
+        mockChoiceRepository.Setup(x => x.GetAllChoicesAsync())
+            .ReturnsAsync(choices);
 
         _handler = new PlayGameCommandHandler(
             _mockRandomClient.Object,

@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace GameService.Application.Tests.Handlers;
+namespace GameService.Application.Tests.Helpers;
 
 public class TestAsyncEnumerable<T> : EnumerableQuery<T>, IAsyncEnumerable<T>, IQueryable<T>
 {

@@ -14,20 +14,19 @@ public class GetChoicesQueryHandlerTests
 
     public GetChoicesQueryHandlerTests()
     {
+        _choices =
+        [
+            new Choice { Id = 1, Name = "rock" },
+            new Choice { Id = 2, Name = "paper" },
+            new Choice { Id = 3, Name = "scissors" },
+            new Choice { Id = 4, Name = "lizard" },
+            new Choice { Id = 5, Name = "spock" }
+        ];
+
         var mockRepository = new Mock<IChoiceRepository>();
-        var mockLogger = new Mock<ILogger<GetChoicesQueryHandler>>();
-
-        _choices = new List<Choice>
-        {
-            new() { Id = 1, Name = "rock" },
-            new() { Id = 2, Name = "paper" },
-            new() { Id = 3, Name = "scissors" },
-            new() { Id = 4, Name = "lizard" },
-            new() { Id = 5, Name = "spock" }
-        };
-
         mockRepository.Setup(x => x.GetAllChoicesAsync())
             .ReturnsAsync(_choices);
+        var mockLogger = new Mock<ILogger<GetChoicesQueryHandler>>();
 
         _handler = new GetChoicesQueryHandler(mockRepository.Object, mockLogger.Object);
     }

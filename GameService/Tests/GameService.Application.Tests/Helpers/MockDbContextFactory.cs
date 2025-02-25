@@ -1,4 +1,3 @@
-using GameService.Application.Tests.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 

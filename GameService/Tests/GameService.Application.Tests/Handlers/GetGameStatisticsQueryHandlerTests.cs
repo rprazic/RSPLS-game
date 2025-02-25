@@ -44,6 +44,7 @@ public class GetGameStatisticsQueryHandlerTests
         mockDbContext.Setup(x => x.GameResults)
             .Returns(mockDbSet.Object);
         var mockLogger = new Mock<ILogger<GetGameStatisticsQueryHandler>>();
+        
         _handler = new GetGameStatisticsQueryHandler(mockDbContext.Object, mockLogger.Object);
     }
 

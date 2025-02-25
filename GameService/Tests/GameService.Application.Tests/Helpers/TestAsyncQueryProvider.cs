@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace GameService.Application.Tests.Handlers;
+namespace GameService.Application.Tests.Helpers;
 
 public class TestAsyncQueryProvider<TEntity>(IQueryProvider inner) : IAsyncQueryProvider
 {
@@ -17,7 +17,7 @@ public class TestAsyncQueryProvider<TEntity>(IQueryProvider inner) : IAsyncQuery
 
     public object Execute(Expression expression)
     {
-        return inner.Execute(expression);
+        return inner.Execute(expression) ?? new object();
     }
 
     public TResult Execute<TResult>(Expression expression)
@@ -32,12 +32,12 @@ public class TestAsyncQueryProvider<TEntity>(IQueryProvider inner) : IAsyncQuery
             .GetMethod(
                 name: nameof(IQueryProvider.Execute),
                 genericParameterCount: 1,
-                types: new[] { typeof(Expression) })
-            .MakeGenericMethod(resultType)
-            .Invoke(this, new[] { expression });
+                types: [typeof(Expression)])
+            ?.MakeGenericMethod(resultType)
+            .Invoke(this, [expression]);
 
         return (TResult)typeof(Task).GetMethod(nameof(Task.FromResult))
-            .MakeGenericMethod(resultType)
-            .Invoke(null, new[] { executionResult });
+            ?.MakeGenericMethod(resultType)
+            .Invoke(null, [executionResult])!;
     }
 }

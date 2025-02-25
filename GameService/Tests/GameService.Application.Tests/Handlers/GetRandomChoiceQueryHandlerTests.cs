@@ -5,7 +5,7 @@ using GameService.Domain.Queries;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace GameService.Tests.Handlers;
+namespace GameService.Application.Tests.Handlers;
 
 public class GetRandomChoiceQueryHandlerTests
 {

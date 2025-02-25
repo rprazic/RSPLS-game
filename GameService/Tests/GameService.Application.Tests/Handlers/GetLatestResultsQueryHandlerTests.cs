@@ -1,10 +1,8 @@
 using GameService.Application.Handlers;
-using GameService.Application.Tests.Handlers;
 using GameService.Application.Tests.Helpers;
 using GameService.Domain.Entities;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace GameService.Application.Tests.Handlers;
