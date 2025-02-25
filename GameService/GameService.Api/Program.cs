@@ -140,6 +140,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSerilogRequestLogging();
 app.MapControllers();
+//TODO: Verify
+app.UseCors(policyBuilder =>
+{
+    policyBuilder
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin();
+});
 app.MapHealthChecks("/health");
 
 app.Run();
