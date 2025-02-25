@@ -3,7 +3,7 @@ using GameService.Domain.Dtos;
 using GameService.Domain.Entities;
 using Mapster;
 
-namespace GameService.Aplication.Mapping;
+namespace GameService.Application.Mapping;
 
 public class GameMappingConfig : IRegister
 {

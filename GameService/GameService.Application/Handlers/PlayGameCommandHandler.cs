@@ -62,11 +62,11 @@ public class PlayGameCommandHandler(
 
         var rules = new Dictionary<int, List<int>>
         {
-            { 1, new List<int> { 3, 4 } },
-            { 2, new List<int> { 1, 5 } },
-            { 3, new List<int> { 2, 4 } },
-            { 4, new List<int> { 2, 5 } },
-            { 5, new List<int> { 1, 3 } }
+            { 1, [3, 4] },
+            { 2, [1, 5] },
+            { 3, [2, 4] },
+            { 4, [2, 5] },
+            { 5, [1, 3] }
         };
 
         var result = rules[player].Contains(computer) ? "win" : "lose";

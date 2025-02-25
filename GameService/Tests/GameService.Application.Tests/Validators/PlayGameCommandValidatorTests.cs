@@ -1,4 +1,4 @@
-using GameService.Aplication.Validators;
+using GameService.Application.Validators;
 using GameService.Domain.Commands;
 
 namespace GameService.Tests.Validators;

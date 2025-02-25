@@ -1,12 +1,11 @@
 using FluentValidation;
 using GameService.Api.Auth;
 using GameService.Api.Extensions;
-using GameService.Aplication.Behaviours;
-using GameService.Aplication.Validators;
 using GameService.Application.Abstractions;
 using GameService.Application.Behaviours;
 using GameService.Application.Extensions;
 using GameService.Application.Handlers;
+using GameService.Application.Validators;
 using GameService.Domain.Settings;
 using GameService.Infrastructure;
 using GameService.Infrastructure.Extensions;

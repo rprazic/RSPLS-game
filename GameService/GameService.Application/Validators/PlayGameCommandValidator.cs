@@ -1,7 +1,7 @@
 using FluentValidation;
 using GameService.Domain.Commands;
 
-namespace GameService.Aplication.Validators;
+namespace GameService.Application.Validators;
 
 public class PlayGameCommandValidator : AbstractValidator<PlayGameCommand>
 {

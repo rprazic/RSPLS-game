@@ -1,4 +1,4 @@
-using GameService.Aplication.Handlers;
+using GameService.Application.Handlers;
 using GameService.Application.Tests.Helpers;
 using GameService.Domain.Entities;
 using GameService.Domain.Models;

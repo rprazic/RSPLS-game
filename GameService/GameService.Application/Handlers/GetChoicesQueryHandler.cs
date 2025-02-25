@@ -11,7 +11,6 @@ public class GetChoicesQueryHandler(IChoiceRepository choiceRepository, ILogger<
 {
     public async Task<List<Choice>> Handle(GetChoicesQuery request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Retrieving all game choices");
         return await choiceRepository.GetAllChoicesAsync();
     }
 }

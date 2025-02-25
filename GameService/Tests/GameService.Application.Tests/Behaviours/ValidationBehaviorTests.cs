@@ -1,6 +1,6 @@
 using FluentValidation;
 using FluentValidation.Results;
-using GameService.Aplication.Validators;
+using GameService.Application.Behaviours;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;

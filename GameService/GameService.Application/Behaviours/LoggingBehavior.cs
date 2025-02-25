@@ -14,12 +14,13 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        var requestType = typeof(TRequest).Name;
-        var requestJson = JsonSerializer.Serialize(request, new JsonSerializerOptions
+        var options = new JsonSerializerOptions
         {
             WriteIndented = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        });
+        };
+        var requestType = typeof(TRequest).Name;
+        var requestJson = JsonSerializer.Serialize(request, options);
 
         logger.LogInformation(
             "Handling {RequestType}\n Request: {RequestJson}",

@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace GameService.Aplication.Handlers;
+namespace GameService.Application.Handlers;
 
 public class GetGameStatisticsQueryHandler(
     GameDbContext dbContext,
