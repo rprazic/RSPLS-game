@@ -1,5 +1,6 @@
 using GameService.Application.Handlers;
 using GameService.Application.Tests.Handlers;
+using GameService.Application.Tests.Helpers;
 using GameService.Domain.Entities;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
@@ -49,31 +50,10 @@ public class GetLatestResultsQueryHandlerTests
             }
         };
 
-        // Set up mock DbSet with LINQ support
-        var mockDbSet = MockDbSet(gameResults);
-        mockDbContext.Setup(x => x.GameResults).Returns(mockDbSet.Object);
-
+        var mockDbSet = MockDbSetFactory.Create(gameResults);
+        mockDbContext.Setup(x => x.GameResults)
+            .Returns(mockDbSet.Object);
         _handler = new GetLatestResultsQueryHandler(mockDbContext.Object);
-    }
-
-    private static Mock<DbSet<T>> MockDbSet<T>(List<T> data) where T : class
-    {
-        var queryable = data.AsQueryable();
-        var mockSet = new Mock<DbSet<T>>();
-
-        mockSet.As<IAsyncEnumerable<T>>()
-            .Setup(m => m.GetAsyncEnumerator(It.IsAny<CancellationToken>()))
-            .Returns(new TestAsyncEnumerator<T>(queryable.GetEnumerator()));
-
-        mockSet.As<IQueryable<T>>()
-            .Setup(m => m.Provider)
-            .Returns(new TestAsyncQueryProvider<T>(queryable.Provider));
-
-        mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-        mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-        mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-
-        return mockSet;
     }
 
     [Fact]

@@ -1,9 +1,9 @@
 using GameService.Aplication.Handlers;
+using GameService.Application.Tests.Helpers;
 using GameService.Domain.Entities;
 using GameService.Domain.Models;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -15,8 +15,6 @@ public class GetGameStatisticsQueryHandlerTests
 
     public GetGameStatisticsQueryHandlerTests()
     {
-        var mockDbContext = new Mock<GameDbContext>();
-        var mockLogger = new Mock<ILogger<GetGameStatisticsQueryHandler>>();
         var gameResults = new List<GameResult>
         {
             new()
@@ -41,30 +39,12 @@ public class GetGameStatisticsQueryHandlerTests
             }
         };
 
-        var mockDbSet = MockDbSet(gameResults);
-        mockDbContext.Setup(x => x.GameResults).Returns(mockDbSet.Object);
-
+        var mockDbContext = new Mock<GameDbContext>();
+        var mockDbSet = MockDbSetFactory.Create(gameResults);
+        mockDbContext.Setup(x => x.GameResults)
+            .Returns(mockDbSet.Object);
+        var mockLogger = new Mock<ILogger<GetGameStatisticsQueryHandler>>();
         _handler = new GetGameStatisticsQueryHandler(mockDbContext.Object, mockLogger.Object);
-    }
-
-    private static Mock<DbSet<T>> MockDbSet<T>(List<T> data) where T : class
-    {
-        var queryable = data.AsQueryable();
-        var mockSet = new Mock<DbSet<T>>();
-
-        mockSet.As<IAsyncEnumerable<T>>()
-            .Setup(m => m.GetAsyncEnumerator(It.IsAny<CancellationToken>()))
-            .Returns(new TestAsyncEnumerator<T>(queryable.GetEnumerator()));
-
-        mockSet.As<IQueryable<T>>()
-            .Setup(m => m.Provider)
-            .Returns(new TestAsyncQueryProvider<T>(queryable.Provider));
-
-        mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-        mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-        mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-
-        return mockSet;
     }
 
     [Fact]
