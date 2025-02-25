@@ -1,4 +1,5 @@
 # Rock, Paper, Scissors, Lizard, Spock Game Service
+![Build & Tests](https://github.com/rprazic/RSPLS-game/actions/workflows/ci.yml/badge.svg)
 
 A modern .NET 9 game service that implements the "Rock, Paper, Scissors, Lizard, Spock" game popularized by the TV show "The Big Bang Theory". The service provides a resilient, well-structured API with comprehensive game statistics and monitoring capabilities.
 
