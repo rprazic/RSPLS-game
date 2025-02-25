@@ -1,3 +1,4 @@
+using GameService.Domain.Extensions;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
 using MediatR;
@@ -12,6 +13,7 @@ public class GetWinRateByChoiceQueryHandler(GameDbContext dbContext)
         CancellationToken cancellationToken)
     {
         var results = await dbContext.GameResults
+            .ApplyFilter(request.TimeRange)
             .GroupBy(r => r.PlayerChoiceName)
             .Select(g => new
             {

@@ -14,8 +14,7 @@ public class StatisticsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameStatisticsDto))]
-    public async Task<ActionResult<GameStatisticsDto>> GetStatistics(
-        [FromQuery] DateTime? from,
+    public async Task<ActionResult<GameStatisticsDto>> GetStatistics([FromQuery] DateTime? from,
         [FromQuery] DateTime? to)
     {
         return await mediator.Send(new GetGameStatisticsQuery
@@ -26,15 +25,23 @@ public class StatisticsController(IMediator mediator) : ControllerBase
 
     [HttpGet("choices")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PlayerStatsDto>))]
-    public async Task<ActionResult<List<PlayerStatsDto>>> GetChoiceStatistics()
+    public async Task<ActionResult<List<PlayerStatsDto>>> GetChoiceStatistics([FromQuery] DateTime? from,
+        [FromQuery] DateTime? to)
     {
-        return await mediator.Send(new GetPlayerChoiceStatsQuery());
+        return await mediator.Send(new GetPlayerChoiceStatsQuery
+        {
+            TimeRange = new TimeRange { From = from, To = to }
+        });
     }
 
     [HttpGet("win-rates")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Dictionary<string, double>))]
-    public async Task<ActionResult<Dictionary<string, double>>> GetWinRates()
+    public async Task<ActionResult<Dictionary<string, double>>> GetWinRates([FromQuery] DateTime? from,
+        [FromQuery] DateTime? to)
     {
-        return await mediator.Send(new GetWinRateByChoiceQuery());
+        return await mediator.Send(new GetWinRateByChoiceQuery
+        {
+            TimeRange = new TimeRange { From = from, To = to }
+        });
     }
 }

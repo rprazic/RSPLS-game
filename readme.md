@@ -41,8 +41,8 @@ A modern .NET 9 game service that implements the "Rock, Paper, Scissors, Lizard,
 ### Statistics Endpoints (Authenticated)
 
 - `GET /statistics?from={date}&to={date}` - Get overall game statistics
-- `GET /statistics/choices` - Get statistics for each choice
-- `GET /statistics/winrates` - Get win rates by choice
+- `GET /statistics/choices?from={date}&to={date}` - Get statistics for each choice
+- `GET /statistics/winrates?from={date}&to={date}` - Get win rates by choice
 
 ## Getting Started
 
