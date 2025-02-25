@@ -1,4 +1,5 @@
 using GameService.Domain.Entities;
+using GameService.Domain.Extensions;
 using GameService.Domain.Models;
 
 namespace GameService.Domain.Tests;
@@ -25,7 +26,7 @@ public class TimeRangeTests
         var timeRange = new TimeRange { From = new DateTime(2025, 2, 1) };
 
         // Act
-        var result = timeRange.ApplyFilter(_queryable).ToList();
+        var result = _queryable.ApplyFilter(timeRange).ToList();
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -39,7 +40,7 @@ public class TimeRangeTests
         var timeRange = new TimeRange { To = new DateTime(2025, 2, 1) };
 
         // Act
-        var result = timeRange.ApplyFilter(_queryable).ToList();
+        var result = _queryable.ApplyFilter(timeRange).ToList();
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -57,7 +58,7 @@ public class TimeRangeTests
         };
 
         // Act
-        var result = timeRange.ApplyFilter(_queryable).ToList();
+        var result = _queryable.ApplyFilter(timeRange).ToList();
 
         // Assert
         Assert.Single(result);

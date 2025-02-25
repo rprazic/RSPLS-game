@@ -1,4 +1,5 @@
 using GameService.Domain.Dtos;
+using GameService.Domain.Extensions;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
 using MediatR;
@@ -16,12 +17,8 @@ public class GetGameStatisticsQueryHandler(
         GetGameStatisticsQuery request,
         CancellationToken cancellationToken)
     {
-        var query = dbContext.GameResults.AsQueryable();
-        if (request.TimeRange is not null)
-        {
-            query = request.TimeRange.ApplyFilter(query);
-        }
-
+        var query = dbContext.GameResults
+            .ApplyFilter(request.TimeRange);
         var results = await query.ToListAsync(cancellationToken);
 
         if (!results.Any())
