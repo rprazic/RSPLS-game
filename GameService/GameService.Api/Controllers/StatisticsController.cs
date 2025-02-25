@@ -13,6 +13,7 @@ namespace GameService.Api.Controllers;
 public class StatisticsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameStatisticsDto))]
     public async Task<ActionResult<GameStatisticsDto>> GetStatistics(
         [FromQuery] DateTime? from,
         [FromQuery] DateTime? to)
@@ -24,12 +25,14 @@ public class StatisticsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("choices")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PlayerStatsDto>))]
     public async Task<ActionResult<List<PlayerStatsDto>>> GetChoiceStatistics()
     {
         return await mediator.Send(new GetPlayerChoiceStatsQuery());
     }
 
-    [HttpGet("winrates")]
+    [HttpGet("win-rates")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Dictionary<string, double>))]
     public async Task<ActionResult<Dictionary<string, double>>> GetWinRates()
     {
         return await mediator.Send(new GetWinRateByChoiceQuery());
