@@ -1,16 +1,11 @@
-using FluentValidation;
 using GameService.Api.Auth;
 using GameService.Api.Extensions;
+using GameService.Application;
 using GameService.Application.Abstractions;
-using GameService.Application.Behaviours;
-using GameService.Application.Extensions;
-using GameService.Application.Handlers;
-using GameService.Application.Validators;
 using GameService.Domain.Settings;
 using GameService.Infrastructure;
 using GameService.Infrastructure.Extensions;
 using GameService.Infrastructure.Repositories;
-using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -88,22 +83,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddMapster();
 builder.Services.AddRandomNumberClient(builder.Configuration);
 builder.Services.AddSingleton<IChoiceRepository, ChoiceRepository>();
-
-// Register MediatR with behaviors
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(typeof(PlayGameCommandHandler).Assembly);
-
-    // Add pipeline behaviors
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
-});
-
-builder.Services.AddValidatorsFromAssembly(typeof(PlayGameCommandValidator).Assembly);
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -139,7 +121,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSerilogRequestLogging();
 app.MapControllers();
-//TODO: Verify
 app.UseCors(policyBuilder =>
 {
     policyBuilder
