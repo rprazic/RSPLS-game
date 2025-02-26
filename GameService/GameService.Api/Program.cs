@@ -1,11 +1,7 @@
 using GameService.Api.Extensions;
 using GameService.Application;
-using GameService.Application.Abstractions;
 using GameService.Infrastructure;
-using GameService.Infrastructure.Extensions;
-using GameService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
@@ -28,45 +24,14 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.WithMachineName()
     .Enrich.WithThreadId()
     .CreateLogger();
-
 builder.Host.UseSerilog();
 
-builder.Services.AddAuthentication(builder.Configuration);
-
-// Add DbContext configuration
-builder.Services.AddDbContext<GameDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Add database health check
-builder.Services.AddHealthChecks()
-    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("ApiKeyHeader", new OpenApiSecurityScheme()
-    {
-        Name = "x-api-key",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Description = "Authorization by x-api-key inside request's header",
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "ApiKeyHeader" }
-            },
-            []
-        }
-    });
-});
-
-builder.Services.AddRandomNumberClient(builder.Configuration);
-builder.Services.AddSingleton<IChoiceRepository, ChoiceRepository>();
-builder.Services.AddApplication(builder.Configuration);
-builder.Services.AddControllers()
+builder.Services
+    .AddAuthentication(builder.Configuration)
+    .AddOpenApiConfig()
+    .AddInfrastructure(builder.Configuration)
+    .AddApplication(builder.Configuration)
+    .AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
         // Disable automatic model state validation to use our custom validation behavior
