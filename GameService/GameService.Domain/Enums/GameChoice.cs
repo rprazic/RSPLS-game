@@ -6,7 +6,7 @@ public enum GameChoice
 {
     [Description("rock")] Rock = 1,
 
-    [Description("scissors")] Paper = 2,
+    [Description("paper")] Paper = 2,
 
     [Description("scissors")] Scissors = 3,
 
