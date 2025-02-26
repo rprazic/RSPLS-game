@@ -1,5 +1,7 @@
 using GameService.Application.Abstractions;
 using GameService.Domain.Dtos;
+using GameService.Domain.Enums;
+using GameService.Domain.Extensions;
 
 namespace GameService.Infrastructure.Repositories;
 
@@ -16,7 +18,10 @@ public class ChoiceRepository : IChoiceRepository
 
     public Task<List<Choice>> GetAllChoicesAsync()
     {
-        return Task.FromResult(_choices);
+        var choices = Enum.GetValues<GameChoice>()
+            .Select(choice => new Choice { Id = choice.ToInt(), Name = choice.ToDescriptionString() })
+            .ToList();
+        return Task.FromResult(choices);
     }
 
     public Task<Choice> GetChoiceByIdAsync(int id)
