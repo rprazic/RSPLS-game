@@ -1,6 +1,6 @@
-using GameService.Domain.Dtos;
 using GameService.Domain.Enums;
 using GameService.Domain.Extensions;
+using GameService.Domain.Models;
 using GameService.Infrastructure.Abstractions;
 
 namespace GameService.Infrastructure.Repositories;

@@ -1,4 +1,4 @@
-using GameService.Domain.Dtos;
+using GameService.Domain.Models;
 using GameService.Domain.Queries;
 using GameService.Infrastructure.Abstractions;
 using MediatR;

@@ -1,4 +1,5 @@
 using GameService.Domain.Dtos;
+using GameService.Domain.Models;
 
 namespace GameService.Infrastructure.Abstractions;
 

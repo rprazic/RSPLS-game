@@ -2,6 +2,7 @@ using FluentAssertions;
 using GameService.Application.Handlers;
 using GameService.Application.Tests.Helpers;
 using GameService.Domain.Dtos;
+using GameService.Domain.Models;
 using GameService.Domain.Queries;
 using GameService.Infrastructure.Abstractions;
 using Microsoft.Extensions.DependencyInjection;

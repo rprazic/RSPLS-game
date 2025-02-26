@@ -1,5 +1,6 @@
 using GameService.Domain.Commands;
 using GameService.Domain.Dtos;
+using GameService.Domain.Models;
 using GameService.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

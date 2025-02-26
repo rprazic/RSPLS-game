@@ -1,6 +1,6 @@
 using GameService.Domain.Commands;
-using GameService.Domain.Dtos;
 using GameService.Domain.Entities;
+using GameService.Domain.Models;
 using GameService.Infrastructure;
 using GameService.Infrastructure.Abstractions;
 using MediatR;
@@ -20,26 +20,12 @@ public class PlayGameCommandHandler(
         var randomNumber = await randomNumberClient.GetRandomNumberAsync(cancellationToken);
         var computerChoiceId = (randomNumber - 1) % 5 + 1;
 
-        var choices = choiceRepository.GetAllChoices();
-        var playerChoice = choices.First(c => c.Id == request.PlayerChoice);
-        var computerChoice = choices.First(c => c.Id == computerChoiceId);
+        var playerChoice = choiceRepository.GetChoiceByIdAsync(request.PlayerChoice);
+        var computerChoice = choiceRepository.GetChoiceByIdAsync(computerChoiceId);
 
         var result = DetermineWinner(request.PlayerChoice, computerChoiceId);
 
-        // Store the result in database
-        var gameResult = new GameResult
-        {
-            PlayerChoice = request.PlayerChoice,
-            ComputerChoice = computerChoiceId,
-            Result = result,
-            PlayerChoiceName = playerChoice.Name,
-            ComputerChoiceName = computerChoice.Name,
-            PlayedAt = DateTime.UtcNow
-        };
-
-        dbContext.GameResults.Add(gameResult);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
+        await StoreResultAsync(request, computerChoiceId, result, playerChoice, computerChoice, cancellationToken);
         logger.LogInformation(
             "Game completed and saved. Result: {Result}, Player: {PlayerChoice}, Computer: {ComputerChoice}",
             result, request.PlayerChoice, computerChoiceId);
@@ -75,5 +61,22 @@ public class PlayGameCommandHandler(
             result, player, computer);
 
         return result;
+    }
+
+    private async Task StoreResultAsync(PlayGameCommand request, int computerChoiceId, string result,
+        Choice playerChoice, Choice computerChoice, CancellationToken cancellationToken)
+    {
+        var gameResult = new GameResult
+        {
+            PlayerChoice = request.PlayerChoice,
+            ComputerChoice = computerChoiceId,
+            Result = result,
+            PlayerChoiceName = playerChoice.Name,
+            ComputerChoiceName = computerChoice.Name,
+            PlayedAt = DateTime.UtcNow
+        };
+
+        dbContext.GameResults.Add(gameResult);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
