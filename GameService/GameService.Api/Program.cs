@@ -1,13 +1,9 @@
-using GameService.Api.Auth;
 using GameService.Api.Extensions;
 using GameService.Application;
 using GameService.Application.Abstractions;
-using GameService.Domain.Settings;
 using GameService.Infrastructure;
 using GameService.Infrastructure.Extensions;
 using GameService.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -35,23 +31,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// Configure Auth
-builder.Services.Configure<AuthSettings>(
-    builder.Configuration.GetSection("AuthSettings"));
-
-builder.Services.AddAuthentication("ApiKey")
-    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthHandler>("ApiKey", null);
-
-builder.Services.AddAuthorization(options =>
-{
-    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAssertion(_ => true)
-        .Build();
-});
+builder.Services.AddAuthentication(builder.Configuration);
 
 // Add DbContext configuration
 builder.Services.AddDbContext<GameDbContext>(options =>
