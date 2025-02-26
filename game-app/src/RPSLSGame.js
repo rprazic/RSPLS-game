@@ -8,7 +8,6 @@ import {
     CircularProgress,
     Card,
     CardContent,
-    CardMedia,
     Box,
     Divider,
     Snackbar,
@@ -22,7 +21,8 @@ import ContentCutIcon from '@mui/icons-material/ContentCut'; // Scissors
 import PetsIcon from '@mui/icons-material/Pets'; // Lizard
 import GestureIcon from '@mui/icons-material/Gesture'; // Spock
 
-const API_URL = 'https://localhost:6001';
+// Get API URL from environment variable or use default
+const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:6001';
 
 // Map ID to icons
 const choiceIcons = {

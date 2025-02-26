@@ -25,6 +25,8 @@
       start_period: 10s
     volumes:
       - ./logs:/app/logs
+    networks:
+      - game-network
 
   db:
     image: postgres:16-alpine
@@ -43,6 +45,26 @@
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - game-network
+
+  game-app:
+    build:
+      context: ../game-app
+      dockerfile: ../game-app/Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=https://localhost:6001
+    depends_on:
+      - game-service.api
+    restart: unless-stopped
+    networks:
+      - game-network
 
 volumes:
   postgres_data:
+    
+networks:
+  game-network:
+    driver: bridge
