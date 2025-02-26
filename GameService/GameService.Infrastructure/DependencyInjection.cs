@@ -1,4 +1,4 @@
-using GameService.Application.Abstractions;
+using GameService.Infrastructure.Abstractions;
 using GameService.Infrastructure.Extensions;
 using GameService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;

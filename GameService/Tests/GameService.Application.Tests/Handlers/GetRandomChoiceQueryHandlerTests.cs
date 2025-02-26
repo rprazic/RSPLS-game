@@ -1,37 +1,29 @@
-using GameService.Application.Abstractions;
 using GameService.Application.Handlers;
+using GameService.Application.Tests.Helpers;
 using GameService.Domain.Dtos;
 using GameService.Domain.Queries;
+using GameService.Infrastructure.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace GameService.Application.Tests.Handlers;
 
-public class GetRandomChoiceQueryHandlerTests
+public class GetRandomChoiceQueryHandlerTests : IClassFixture<TestFixture>
 {
     private readonly Mock<IRandomNumberClient> _mockRandomClient;
     private readonly GetRandomChoiceQueryHandler _handler;
 
-    public GetRandomChoiceQueryHandlerTests()
+    public GetRandomChoiceQueryHandlerTests(TestFixture fixture)
     {
+        var repository = fixture.Host?.Services
+            .GetRequiredService<IChoiceRepository>();
         _mockRandomClient = new Mock<IRandomNumberClient>();
-        var mockRepository = new Mock<IChoiceRepository>();
         var mockLogger = new Mock<ILogger<GetRandomChoiceQueryHandler>>();
 
-        var choices = new List<Choice>
-        {
-            new() { Id = 1, Name = "rock" },
-            new() { Id = 2, Name = "paper" },
-            new() { Id = 3, Name = "scissors" },
-            new() { Id = 4, Name = "lizard" },
-            new() { Id = 5, Name = "spock" }
-        };
-
-        mockRepository.Setup(x => x.GetAllChoicesAsync())
-            .ReturnsAsync(choices);
         _handler = new GetRandomChoiceQueryHandler(
             _mockRandomClient.Object,
-            mockRepository.Object,
+            repository!,
             mockLogger.Object);
     }
 

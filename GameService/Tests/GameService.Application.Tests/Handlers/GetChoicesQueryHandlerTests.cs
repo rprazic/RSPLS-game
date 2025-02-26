@@ -1,18 +1,21 @@
-using GameService.Application.Abstractions;
+using FluentAssertions;
 using GameService.Application.Handlers;
+using GameService.Application.Tests.Helpers;
 using GameService.Domain.Dtos;
 using GameService.Domain.Queries;
+using GameService.Infrastructure.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace GameService.Application.Tests.Handlers;
 
-public class GetChoicesQueryHandlerTests
+public class GetChoicesQueryHandlerTests : IClassFixture<TestFixture>
 {
     private readonly GetChoicesQueryHandler _handler;
     private readonly List<Choice> _choices;
 
-    public GetChoicesQueryHandlerTests()
+    public GetChoicesQueryHandlerTests(TestFixture fixture)
     {
         _choices =
         [
@@ -23,12 +26,11 @@ public class GetChoicesQueryHandlerTests
             new Choice { Id = 5, Name = "spock" }
         ];
 
-        var mockRepository = new Mock<IChoiceRepository>();
-        mockRepository.Setup(x => x.GetAllChoicesAsync())
-            .ReturnsAsync(_choices);
+        var repository = fixture.Host?.Services
+            .GetRequiredService<IChoiceRepository>();
         var mockLogger = new Mock<ILogger<GetChoicesQueryHandler>>();
 
-        _handler = new GetChoicesQueryHandler(mockRepository.Object, mockLogger.Object);
+        _handler = new GetChoicesQueryHandler(repository!, mockLogger.Object);
     }
 
     [Fact]
@@ -41,7 +43,6 @@ public class GetChoicesQueryHandlerTests
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        Assert.Equal(5, result.Count);
-        Assert.Equal(_choices, result);
+        result.Should().BeEquivalentTo(_choices);
     }
 }

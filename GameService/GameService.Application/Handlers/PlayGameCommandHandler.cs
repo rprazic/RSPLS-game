@@ -1,8 +1,8 @@
-using GameService.Application.Abstractions;
 using GameService.Domain.Commands;
 using GameService.Domain.Dtos;
 using GameService.Domain.Entities;
 using GameService.Infrastructure;
+using GameService.Infrastructure.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +20,7 @@ public class PlayGameCommandHandler(
         var randomNumber = await randomNumberClient.GetRandomNumberAsync(cancellationToken);
         var computerChoiceId = (randomNumber - 1) % 5 + 1;
 
-        var choices = await choiceRepository.GetAllChoicesAsync();
+        var choices = choiceRepository.GetAllChoices();
         var playerChoice = choices.First(c => c.Id == request.PlayerChoice);
         var computerChoice = choices.First(c => c.Id == computerChoiceId);
 

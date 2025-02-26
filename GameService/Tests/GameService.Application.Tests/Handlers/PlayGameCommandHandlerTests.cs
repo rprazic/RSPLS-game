@@ -1,47 +1,38 @@
-using GameService.Application.Abstractions;
 using GameService.Application.Handlers;
+using GameService.Application.Tests.Helpers;
 using GameService.Domain.Commands;
-using GameService.Domain.Dtos;
 using GameService.Domain.Entities;
 using GameService.Infrastructure;
+using GameService.Infrastructure.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace GameService.Application.Tests.Handlers;
 
-public class PlayGameCommandHandlerTests
+public class PlayGameCommandHandlerTests : IClassFixture<TestFixture>
 {
     private readonly Mock<IRandomNumberClient> _mockRandomClient;
     private readonly Mock<GameDbContext> _mockDbContext;
     private readonly Mock<DbSet<GameResult>> _mockGameResults;
     private readonly PlayGameCommandHandler _handler;
 
-    public PlayGameCommandHandlerTests()
+    public PlayGameCommandHandlerTests(TestFixture fixture)
     {
-        var choices = new List<Choice>
-        {
-            new() { Id = 1, Name = "rock" },
-            new() { Id = 2, Name = "paper" },
-            new() { Id = 3, Name = "scissors" },
-            new() { Id = 4, Name = "lizard" },
-            new() { Id = 5, Name = "spock" }
-        };
-
+        var repository = fixture.Host?.Services
+            .GetRequiredService<IChoiceRepository>();
         _mockRandomClient = new Mock<IRandomNumberClient>();
         _mockDbContext = new Mock<GameDbContext>();
         _mockGameResults = new Mock<DbSet<GameResult>>();
         _mockDbContext.Setup(x => x.GameResults).Returns(_mockGameResults.Object);
         var mockLogger = new Mock<ILogger<PlayGameCommandHandler>>();
-        var mockChoiceRepository = new Mock<IChoiceRepository>();
-        mockChoiceRepository.Setup(x => x.GetAllChoicesAsync())
-            .ReturnsAsync(choices);
 
         _handler = new PlayGameCommandHandler(
             _mockRandomClient.Object,
             _mockDbContext.Object,
             mockLogger.Object,
-            mockChoiceRepository.Object);
+            repository!);
     }
 
     [Theory]

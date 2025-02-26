@@ -1,4 +1,4 @@
-namespace GameService.Application.Abstractions;
+namespace GameService.Infrastructure.Abstractions;
 
 public interface IRandomNumberClient
 {

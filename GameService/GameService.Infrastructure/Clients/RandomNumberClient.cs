@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
-using GameService.Application.Abstractions;
 using GameService.Domain.Responses;
+using GameService.Infrastructure.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace GameService.Infrastructure.Clients;

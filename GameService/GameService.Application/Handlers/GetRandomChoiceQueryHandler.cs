@@ -1,6 +1,6 @@
-using GameService.Application.Abstractions;
 using GameService.Domain.Dtos;
 using GameService.Domain.Queries;
+using GameService.Infrastructure.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -16,8 +16,7 @@ public class GetRandomChoiceQueryHandler(
     {
         var randomNumber = await randomNumberClient.GetRandomNumberAsync(cancellationToken);
         var choiceIndex = (randomNumber - 1) % 5 + 1;
-        var choices = await choiceRepository.GetAllChoicesAsync();
-        var choice = choices.First(c => c.Id == choiceIndex);
+        var choice = choiceRepository.GetChoiceByIdAsync(choiceIndex);
 
         logger.LogInformation(
             "Generated random choice: {ChoiceName} (ID: {ChoiceId}) from random number {RandomNumber}",

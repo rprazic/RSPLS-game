@@ -1,9 +1,9 @@
 using GameService.Domain.Dtos;
 
-namespace GameService.Application.Abstractions;
+namespace GameService.Infrastructure.Abstractions;
 
 public interface IChoiceRepository
 {
-    Task<List<Choice>> GetAllChoicesAsync();
-    Task<Choice> GetChoiceByIdAsync(int id);
+    List<Choice> GetAllChoices();
+    Choice GetChoiceByIdAsync(int id);
 }

@@ -1,4 +1,4 @@
-using GameService.Application.Abstractions;
+using GameService.Infrastructure.Abstractions;
 using GameService.Infrastructure.Clients;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

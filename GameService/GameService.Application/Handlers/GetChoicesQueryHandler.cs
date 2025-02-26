@@ -1,6 +1,6 @@
-using GameService.Application.Abstractions;
 using GameService.Domain.Dtos;
 using GameService.Domain.Queries;
+using GameService.Infrastructure.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -9,8 +9,9 @@ namespace GameService.Application.Handlers;
 public class GetChoicesQueryHandler(IChoiceRepository choiceRepository, ILogger<GetChoicesQueryHandler> logger)
     : IRequestHandler<GetChoicesQuery, List<Choice>>
 {
-    public async Task<List<Choice>> Handle(GetChoicesQuery request, CancellationToken cancellationToken)
+    public Task<List<Choice>> Handle(GetChoicesQuery request, CancellationToken cancellationToken)
     {
-        return await choiceRepository.GetAllChoicesAsync();
+        var choices = choiceRepository.GetAllChoices();
+        return Task.FromResult(choices);
     }
 }
