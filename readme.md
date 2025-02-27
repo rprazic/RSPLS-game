@@ -183,18 +183,15 @@ Key configuration options in appsettings.json:
 
 4. Update the connection string in `appsettings.Development.json`
 
-5. Apply database migrations:
-   ```bash
-   dotnet ef database update
-   ```
 
-6. Run the application:
+5. Run the application:
    ```bash
    dotnet run
    ```
 
 ## Credits
 
+- [Resilient Http Calls using Polly](https://medium.com/@sdbala/resilient-http-calls-using-polly-307855cb98b3)
 - [Setup migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/projects?tabs=dotnet-core-cli)
 - [.NET developer HTTPS certificate config](https://stackoverflow.com/questions/69282468/using-dotnet-dev-certs-with-aspnet-docker-image#comment138114599_76165591)
 
