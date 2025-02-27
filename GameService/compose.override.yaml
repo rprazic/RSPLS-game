@@ -1,8 +1,0 @@
-﻿services:
-  game-service.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:80;https://+:443
-    ports:
-      - "8080:80"
-      - "8443:443"

@@ -5,7 +5,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C521183-737B-4F5D-BCA4-C7BB176271E4}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
-		compose.override.yaml = compose.override.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameService.Domain", "GameService.Domain\GameService.Domain.csproj", "{FCE87132-5975-4909-A2EB-857EB8D9B22E}"

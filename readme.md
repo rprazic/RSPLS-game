@@ -52,6 +52,7 @@ A modern .NET 9 game service that implements the "Rock, Paper, Scissors, Lizard,
 - Docker and Docker Compose
 - .NET 9 SDK (for development)
 - PostgreSQL (if running locally)
+- Node.js 22+ and npm (for development)
 
 ### Running with Docker Compose
 
@@ -67,6 +68,8 @@ A modern .NET 9 game service that implements the "Rock, Paper, Scissors, Lizard,
    ```
 
 3. Access the API at [https://localhost:6001/swagger](https://localhost:6001/swagger)
+
+4. Access the game UI at [https://localhost](https://localhost)
 
 ## Authentication
 
@@ -128,11 +131,6 @@ The application includes Docker configurations for both development and producti
 Development:
 ```bash
 docker-compose up -d
-```
-
-Production:
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 ```
 
 ## Monitoring
