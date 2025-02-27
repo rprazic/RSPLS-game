@@ -69,7 +69,7 @@ A modern .NET 9 game service that implements the "Rock, Paper, Scissors, Lizard,
 
 3. Access the API at [https://localhost:6001/swagger](https://localhost:6001/swagger)
 
-4. Access the game UI at [https://localhost](https://localhost)
+4. Access the game UI at [http://localhost](http://localhost)
 
 ## Authentication
 

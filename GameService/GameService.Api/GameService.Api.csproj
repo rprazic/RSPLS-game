@@ -31,6 +31,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include=".\Certificates\aspnetapp.pfx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\GameService.Application\GameService.Application.csproj" />
     </ItemGroup>
 

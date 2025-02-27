@@ -9,7 +9,7 @@
       - "6001:443"
     environment:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=some.long.password
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/Certificates/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/cert/aspnetapp.pfx
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80;https://+:443
       - ConnectionStrings__DefaultConnection=Host=db;Database=game-db;Port=5433;Username=game-user;Password=:/d529o{0Un~

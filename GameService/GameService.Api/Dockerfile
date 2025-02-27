@@ -26,4 +26,9 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Copy certificate
+COPY --from=build /app/build/Certificates ../cert
+USER root
+RUN chmod 755 /cert
+
 ENTRYPOINT ["dotnet", "GameService.Api.dll"]
