@@ -1,6 +1,7 @@
 using GameService.Application.Handlers;
 using GameService.Application.Tests.Helpers;
 using GameService.Domain.Entities;
+using GameService.Domain.Enums;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
 using Moq;
@@ -18,32 +19,32 @@ public class GetLatestResultsQueryHandlerTests
         {
             new()
             {
-                Id = Guid.NewGuid(), PlayerChoice = 1, ComputerChoice = 3, Result = "win",
-                PlayerChoiceName = "rock", ComputerChoiceName = "scissors",
+                Id = Guid.NewGuid(), PlayerChoice = GameChoice.Rock, ComputerChoice = GameChoice.Scissors,
+                Result = "win", PlayerChoiceName = "rock", ComputerChoiceName = "scissors",
                 PlayedAt = DateTime.UtcNow.AddMinutes(-5)
             },
             new()
             {
-                Id = Guid.NewGuid(), PlayerChoice = 2, ComputerChoice = 1, Result = "win",
-                PlayerChoiceName = "paper", ComputerChoiceName = "rock",
+                Id = Guid.NewGuid(), PlayerChoice = GameChoice.Paper, ComputerChoice = GameChoice.Rock,
+                Result = "win", PlayerChoiceName = "paper", ComputerChoiceName = "rock",
                 PlayedAt = DateTime.UtcNow.AddMinutes(-4)
             },
             new()
             {
-                Id = Guid.NewGuid(), PlayerChoice = 3, ComputerChoice = 2, Result = "win",
-                PlayerChoiceName = "scissors", ComputerChoiceName = "paper",
+                Id = Guid.NewGuid(), PlayerChoice = GameChoice.Scissors, ComputerChoice = GameChoice.Paper,
+                Result = "win", PlayerChoiceName = "scissors", ComputerChoiceName = "paper",
                 PlayedAt = DateTime.UtcNow.AddMinutes(-3)
             },
             new()
             {
-                Id = Guid.NewGuid(), PlayerChoice = 4, ComputerChoice = 5, Result = "win",
-                PlayerChoiceName = "lizard", ComputerChoiceName = "spock",
+                Id = Guid.NewGuid(), PlayerChoice = GameChoice.Lizard, ComputerChoice = GameChoice.Spock,
+                Result = "win", PlayerChoiceName = "lizard", ComputerChoiceName = "spock",
                 PlayedAt = DateTime.UtcNow.AddMinutes(-2)
             },
             new()
             {
-                Id = Guid.NewGuid(), PlayerChoice = 5, ComputerChoice = 1, Result = "win",
-                PlayerChoiceName = "spock", ComputerChoiceName = "rock",
+                Id = Guid.NewGuid(), PlayerChoice = GameChoice.Spock, ComputerChoice = GameChoice.Rock,
+                Result = "win", PlayerChoiceName = "spock", ComputerChoiceName = "rock",
                 PlayedAt = DateTime.UtcNow.AddMinutes(-1)
             }
         };

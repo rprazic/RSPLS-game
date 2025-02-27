@@ -1,5 +1,7 @@
 using GameService.Domain.Commands;
 using GameService.Domain.Entities;
+using GameService.Domain.Enums;
+using GameService.Domain.Extensions;
 using GameService.Domain.Models;
 using GameService.Infrastructure;
 using GameService.Infrastructure.Abstractions;
@@ -11,21 +13,19 @@ namespace GameService.Application.Handlers;
 public class PlayGameCommandHandler(
     IRandomNumberClient randomNumberClient,
     GameDbContext dbContext,
-    ILogger<PlayGameCommandHandler> logger,
-    IChoiceRepository choiceRepository)
+    ILogger<PlayGameCommandHandler> logger)
     : IRequestHandler<PlayGameCommand, PlayResult>
 {
     public async Task<PlayResult> Handle(PlayGameCommand request, CancellationToken cancellationToken)
     {
         var randomNumber = await randomNumberClient.GetRandomNumberAsync(cancellationToken);
         var computerChoiceId = (randomNumber - 1) % 5 + 1;
+        var computerChoice = (GameChoice)computerChoiceId;
+        var playerChoice = (GameChoice)request.PlayerChoice;
 
-        var playerChoice = choiceRepository.GetChoiceByIdAsync(request.PlayerChoice);
-        var computerChoice = choiceRepository.GetChoiceByIdAsync(computerChoiceId);
+        var result = DetermineWinner(playerChoice, computerChoice);
 
-        var result = DetermineWinner(request.PlayerChoice, computerChoiceId);
-
-        await StoreResultAsync(request, computerChoiceId, result, playerChoice, computerChoice, cancellationToken);
+        await StoreResultAsync(playerChoice, computerChoice, result, cancellationToken);
         logger.LogInformation(
             "Game completed and saved. Result: {Result}, Player: {PlayerChoice}, Computer: {ComputerChoice}",
             result, request.PlayerChoice, computerChoiceId);
@@ -38,7 +38,7 @@ public class PlayGameCommandHandler(
         };
     }
 
-    private string DetermineWinner(int player, int computer)
+    private string DetermineWinner(GameChoice player, GameChoice computer)
     {
         if (player == computer)
         {
@@ -46,13 +46,13 @@ public class PlayGameCommandHandler(
             return "tie";
         }
 
-        var rules = new Dictionary<int, List<int>>
+        var rules = new Dictionary<GameChoice, List<GameChoice>>
         {
-            { 1, [3, 4] },
-            { 2, [1, 5] },
-            { 3, [2, 4] },
-            { 4, [2, 5] },
-            { 5, [1, 3] }
+            { GameChoice.Rock, [GameChoice.Scissors, GameChoice.Lizard] },
+            { GameChoice.Paper, [GameChoice.Rock, GameChoice.Spock] },
+            { GameChoice.Scissors, [GameChoice.Paper, GameChoice.Lizard] },
+            { GameChoice.Lizard, [GameChoice.Paper, GameChoice.Spock] },
+            { GameChoice.Spock, [GameChoice.Rock, GameChoice.Scissors] }
         };
 
         var result = rules[player].Contains(computer) ? "win" : "lose";
@@ -63,16 +63,16 @@ public class PlayGameCommandHandler(
         return result;
     }
 
-    private async Task StoreResultAsync(PlayGameCommand request, int computerChoiceId, string result,
-        Choice playerChoice, Choice computerChoice, CancellationToken cancellationToken)
+    private async Task StoreResultAsync(GameChoice playerChoice, GameChoice computerChoice, string result,
+        CancellationToken cancellationToken)
     {
         var gameResult = new GameResult
         {
-            PlayerChoice = request.PlayerChoice,
-            ComputerChoice = computerChoiceId,
+            PlayerChoice = playerChoice,
+            ComputerChoice = computerChoice,
             Result = result,
-            PlayerChoiceName = playerChoice.Name,
-            ComputerChoiceName = computerChoice.Name,
+            PlayerChoiceName = playerChoice.ToDescriptionString(),
+            ComputerChoiceName = computerChoice.ToDescriptionString(),
             PlayedAt = DateTime.UtcNow
         };
 

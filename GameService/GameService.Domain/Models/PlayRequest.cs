@@ -1,4 +1,4 @@
-namespace GameService.Domain.Dtos;
+namespace GameService.Domain.Models;
 
 public class PlayRequest
 {

@@ -1,27 +1,25 @@
+using FluentAssertions;
 using GameService.Application.Handlers;
-using GameService.Application.Tests.Helpers;
 using GameService.Domain.Commands;
 using GameService.Domain.Entities;
+using GameService.Domain.Enums;
 using GameService.Infrastructure;
 using GameService.Infrastructure.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace GameService.Application.Tests.Handlers;
 
-public class PlayGameCommandHandlerTests : IClassFixture<TestFixture>
+public class PlayGameCommandHandlerTests
 {
     private readonly Mock<IRandomNumberClient> _mockRandomClient;
     private readonly Mock<GameDbContext> _mockDbContext;
     private readonly Mock<DbSet<GameResult>> _mockGameResults;
     private readonly PlayGameCommandHandler _handler;
 
-    public PlayGameCommandHandlerTests(TestFixture fixture)
+    public PlayGameCommandHandlerTests()
     {
-        var repository = fixture.Host?.Services
-            .GetRequiredService<IChoiceRepository>();
         _mockRandomClient = new Mock<IRandomNumberClient>();
         _mockDbContext = new Mock<GameDbContext>();
         _mockGameResults = new Mock<DbSet<GameResult>>();
@@ -31,8 +29,7 @@ public class PlayGameCommandHandlerTests : IClassFixture<TestFixture>
         _handler = new PlayGameCommandHandler(
             _mockRandomClient.Object,
             _mockDbContext.Object,
-            mockLogger.Object,
-            repository!);
+            mockLogger.Object);
     }
 
     [Theory]
@@ -50,8 +47,8 @@ public class PlayGameCommandHandlerTests : IClassFixture<TestFixture>
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        Assert.Equal(expectedResult, result.Results);
-        Assert.Equal(playerChoice, result.Player);
+        expectedResult.Should().Be(result.Results);
+        playerChoice.Should().Be(result.Player);
         Assert.Equal(computerChoice, result.Computer);
     }
 
@@ -69,13 +66,12 @@ public class PlayGameCommandHandlerTests : IClassFixture<TestFixture>
         // Assert
         _mockGameResults.Verify(x => x.Add(
                 It.Is<GameResult>(r =>
-                    r.PlayerChoice == 1 &&
-                    r.ComputerChoice == 2 &&
+                    r.PlayerChoice == GameChoice.Rock &&
+                    r.ComputerChoice == GameChoice.Paper &&
                     r.Result == "lose" &&
                     r.PlayerChoiceName == "rock" &&
                     r.ComputerChoiceName == "paper")),
             Times.Once);
-
         _mockDbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

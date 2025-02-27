@@ -1,6 +1,7 @@
 using GameService.Application.Handlers;
 using GameService.Application.Tests.Helpers;
 using GameService.Domain.Entities;
+using GameService.Domain.Enums;
 using GameService.Domain.Models;
 using GameService.Domain.Queries;
 using GameService.Infrastructure;
@@ -20,8 +21,8 @@ public class GetGameStatisticsQueryHandlerTests
             new()
             {
                 Id = Guid.NewGuid(),
-                PlayerChoice = 1,
-                ComputerChoice = 3,
+                PlayerChoice = GameChoice.Rock,
+                ComputerChoice = GameChoice.Scissors,
                 Result = "win",
                 PlayerChoiceName = "rock",
                 ComputerChoiceName = "scissors",
@@ -30,8 +31,8 @@ public class GetGameStatisticsQueryHandlerTests
             new()
             {
                 Id = Guid.NewGuid(),
-                PlayerChoice = 2,
-                ComputerChoice = 1,
+                PlayerChoice = GameChoice.Paper,
+                ComputerChoice = GameChoice.Rock,
                 Result = "win",
                 PlayerChoiceName = "paper",
                 ComputerChoiceName = "rock",
@@ -44,7 +45,7 @@ public class GetGameStatisticsQueryHandlerTests
         mockDbContext.Setup(x => x.GameResults)
             .Returns(mockDbSet.Object);
         var mockLogger = new Mock<ILogger<GetGameStatisticsQueryHandler>>();
-        
+
         _handler = new GetGameStatisticsQueryHandler(mockDbContext.Object, mockLogger.Object);
     }
 
