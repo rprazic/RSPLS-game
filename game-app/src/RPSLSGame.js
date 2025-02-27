@@ -75,9 +75,10 @@ function RPSLSGame() {
             if (!response.ok) throw new Error(`Error fetching random choice: ${response.statusText}`);
             const data = await response.json();
             setRandomChoice(data);
+            playGame(data.id);
             setSnackbar({
                 open: true,
-                message: `Random choice: ${data.name}`,
+                message: `Random choice selected: ${data.name}`,
                 severity: 'info'
             });
         } catch (err) {
